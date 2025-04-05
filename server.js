@@ -24,8 +24,8 @@ function createBuyerMessageHtml({ name, surname, email, quantity }) {
   return `
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;">
       <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-        <h2 style="color: #111;">🎟️ Conferma acquisto - Dirty Rain Fest</h2>
-        <p>Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per <strong>${quantity}</strong> prevendita/e.</p>
+        <h2 style="color: #111;">🎟️ Conferma acquisto biglietti - Dirty Rain Fest</h2>
+        <p>Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per <strong>${quantity}</strong> prevendita/e. Presenta questa email direttamente in cassa.</p>
         <hr style="margin: 20px 0;">
         <p><strong>Nome:</strong> ${name}</p>
         <p><strong>Cognome:</strong> ${surname}</p>
@@ -41,9 +41,9 @@ function createBuyerMessageHtml({ name, surname, email, quantity }) {
 
 function createBuyerMessageText({ name, surname, email, quantity }) {
   return `
-🎟️ Conferma acquisto - Dirty Rain Fest
+🎟️ Conferma acquisto biglietti - Dirty Rain Fest
 
-Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per ${quantity} prevendita/e.
+Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per ${quantity} prevendita/e. Presenta questa email direttamente in cassa.
 
 Nome: ${name}
 Cognome: ${surname}
@@ -130,9 +130,9 @@ app.post('/api/ipn', (req, res) => {
         // Email all'utente
         if (formEmail) {
           await transporter.sendMail({
-            from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
+            from: `"Dirty Rain Fest" <${process.env.EMAIL_SENDER}>`,
             to: formEmail,
-            subject: 'Conferma pagamento avvenuto',
+            subject: 'Conferma acquisto biglietti',
             html: createBuyerMessageHtml({ name, surname, email: formEmail, quantity }),
             text: createBuyerMessageText({ name, surname, email: formEmail, quantity }),
             headers: {
