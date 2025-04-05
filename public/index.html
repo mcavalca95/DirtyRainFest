@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prevendite Evento</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d0d0d;
+      font-family: 'Segoe UI', sans-serif;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-img {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+
+    .form-container {
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .error {
+      color: #ff4d4d;
+      font-size: 14px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background-color: #2a2a2a;
+      color: #f0f0f0;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #b00610;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Immagine sopra il frame -->
+  <img src="dirty_rain_fest_copertina.jpeg" alt="Copertina evento" class="header-img" />
+
+  <!-- Frame con il form -->
+  <div class="form-container">
+    <h1>Acquista le tue prevendite</h1>
+    <form id="preorder-form">
+      <input type="text" name="name" placeholder="Nome">
+      <div class="error" id="error-name"></div>
+
+      <input type="text" name="surname" placeholder="Cognome">
+      <div class="error" id="error-surname"></div>
+
+      <input type="email" name="email" placeholder="Email">
+      <div class="error" id="error-email"></div>
+
+      <input type="number" name="quantity" placeholder="N. Prevendite" min="1">
+      <div class="error" id="error-quantity"></div>
+
+      <button type="submit">Procedi al pagamento</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
