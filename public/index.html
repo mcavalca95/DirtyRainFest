@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prevendite Evento</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: #0d0d0d;
-      font-family: 'Segoe UI', sans-serif;
-      color: #f0f0f0;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      color: #333;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -20,14 +20,12 @@
       width: 100%;
       max-width: 400px;
       margin-top: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
     }
 
     .form-container {
-      background-color: #1a1a1a;
+      background-color: #fff;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
       padding: 30px;
       margin-top: 20px;
       width: 90%;
@@ -39,11 +37,25 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 22px;
-      color: #fff;
+      color: #111;
+    }
+
+    .info-box {
+      background-color: #f1f1f1;
+      border-left: 4px solid #111;
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    .info-box strong {
+      font-weight: bold;
     }
 
     .error {
-      color: #ff4d4d;
+      color: red;
       font-size: 14px;
       margin-top: -10px;
       margin-bottom: 10px;
@@ -54,28 +66,21 @@
       padding: 12px;
       margin-bottom: 15px;
       border-radius: 8px;
-      border: 1px solid #444;
-      background-color: #2a2a2a;
-      color: #f0f0f0;
+      border: 1px solid #ccc;
       font-size: 16px;
       box-sizing: border-box;
     }
 
-    input::placeholder {
-      color: #999;
-    }
-
     button {
-      background-color: #e50914;
+      background-color: #111;
       color: white;
       border: none;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: background-color 0.3s;
     }
 
     button:hover {
-      background-color: #b00610;
-      transform: scale(1.02);
+      background-color: #444;
     }
 
     @media (max-width: 480px) {
@@ -92,6 +97,14 @@
 
   <!-- Frame con il form -->
   <div class="form-container">
+    <!-- Info preliminari -->
+    <div class="info-box">
+      <p>
+        ℹ️ Dopo il pagamento riceverai una <strong>email di conferma</strong> da mostrare all’ingresso dell’evento.<br>
+        Se non la trovi, controlla nella cartella <strong>spam</strong> o <strong>posta indesiderata</strong>.
+      </p>
+    </div>
+
     <h1>Acquista le tue prevendite</h1>
     <form id="preorder-form">
       <input type="text" name="name" placeholder="Nome">
