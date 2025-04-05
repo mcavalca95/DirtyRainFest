@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
@@ -20,7 +19,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Email templates
+// HTML & TEXT email templates
 function createBuyerMessageHtml({ name, surname, email, quantity }) {
   return `
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;">
@@ -34,8 +33,26 @@ function createBuyerMessageHtml({ name, surname, email, quantity }) {
         <p><strong>Quantità:</strong> ${quantity}</p>
         <hr style="margin: 20px 0;">
         <p>Ti aspettiamo all’evento! 🎶</p>
+        <p style="margin-top: 30px; font-size: 12px; color: #888;">Contattaci: rain.info@raincrew.com</p>
       </div>
     </div>
+  `;
+}
+
+function createBuyerMessageText({ name, surname, email, quantity }) {
+  return `
+🎟️ Conferma acquisto - Dirty Rain Fest
+
+Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per ${quantity} prevendita/e.
+
+Nome: ${name}
+Cognome: ${surname}
+Email: ${email}
+Quantità: ${quantity}
+
+Ti aspettiamo all’evento! 🎶
+
+Contattaci: rain.info@raincrew.com
   `;
 }
 
@@ -51,12 +68,29 @@ function createOrganizerMessageHtml({ name, surname, formEmail, paypalEmail, qua
         <p><strong>Email PayPal:</strong> ${paypalEmail}</p>
         <p><strong>Email form:</strong> ${formEmail}</p>
         <p><strong>Quantità:</strong> ${quantity}</p>
+        <p style="margin-top: 30px; font-size: 12px; color: #888;">Contatto cliente: ${formEmail}</p>
       </div>
     </div>
   `;
 }
 
-// Endpoint IPN PayPal
+function createOrganizerMessageText({ name, surname, formEmail, paypalEmail, quantity }) {
+  return `
+✅ Pagamento ricevuto - Dirty Rain Fest
+
+Nuovo acquisto confermato:
+
+Nome: ${name}
+Cognome: ${surname}
+Email PayPal: ${paypalEmail}
+Email form: ${formEmail}
+Quantità: ${quantity}
+
+Contatto cliente: ${formEmail}
+  `;
+}
+
+// IPN endpoint
 app.post('/api/ipn', (req, res) => {
   console.log('📩 IPN ricevuto:', req.body);
   res.status(200).send('OK');
@@ -64,54 +98,62 @@ app.post('/api/ipn', (req, res) => {
   ipn.verify(req.body, { allow_sandbox: false }, async function (err, msg) {
     if (err) {
       console.error('❌ Errore verifica IPN:', err);
-    } else {
-      if (req.body.payment_status === 'Completed') {
-        const name = req.body.first_name || 'N/D';
-        const surname = req.body.last_name || 'N/D';
-        const paypalEmail = req.body.payer_email;
-        const quantity = req.body.quantity || 1;
+    } else if (req.body.payment_status === 'Completed') {
+      const name = req.body.first_name || 'N/D';
+      const surname = req.body.last_name || 'N/D';
+      const paypalEmail = req.body.payer_email;
+      const quantity = req.body.quantity || 1;
 
-        let formEmail = null;
-        try {
-          const customData = JSON.parse(req.body.custom);
-          formEmail = customData.formEmail;
-        } catch (e) {
-          console.warn('⚠️ Campo custom mancante o non valido');
-        }
+      let formEmail = null;
+      try {
+        const customData = JSON.parse(req.body.custom);
+        formEmail = customData.formEmail;
+      } catch (e) {
+        console.warn('⚠️ Campo custom mancante o non valido');
+      }
 
-        try {
-          // Email all'organizzatore
+      try {
+        // Email all'organizzatore
+        await transporter.sendMail({
+          from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
+          to: process.env.EMAIL_ORGANIZER,
+          subject: 'Pagamento confermato da PayPal',
+          html: createOrganizerMessageHtml({ name, surname, formEmail, paypalEmail, quantity }),
+          text: createOrganizerMessageText({ name, surname, formEmail, paypalEmail, quantity }),
+          headers: {
+            'X-Mailer': 'NodeMailer',
+            'X-Originating-IP': req.ip,
+            'Reply-To': process.env.EMAIL_SENDER
+          }
+        });
+
+        // Email all'utente
+        if (formEmail) {
           await transporter.sendMail({
             from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
-            to: process.env.EMAIL_ORGANIZER,
-            subject: 'Pagamento confermato da PayPal',
-            html: createOrganizerMessageHtml({ name, surname, formEmail, paypalEmail, quantity }),
-            replyTo: 'dirtyrainfest@gmail.com'
+            to: formEmail,
+            subject: 'Conferma pagamento avvenuto',
+            html: createBuyerMessageHtml({ name, surname, email: formEmail, quantity }),
+            text: createBuyerMessageText({ name, surname, email: formEmail, quantity }),
+            headers: {
+              'X-Mailer': 'NodeMailer',
+              'X-Originating-IP': req.ip,
+              'Reply-To': process.env.EMAIL_SENDER
+            }
           });
-
-          // Email all'utente (solo email del form, se presente)
-          if (formEmail) {
-            await transporter.sendMail({
-              from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
-              to: formEmail,
-              subject: 'Conferma pagamento avvenuto',
-              html: createBuyerMessageHtml({ name, surname, email: formEmail, quantity }),
-              replyTo: 'dirtyrainfest@gmail.com'
-            });
-            console.log(`📧 Email inviata a ${formEmail}`);
-          } else {
-            console.warn('⚠️ Nessuna email utente disponibile per l\'invio');
-          }
-
-        } catch (err) {
-          console.error('❌ Errore nell\'invio delle email:', err);
+          console.log(`📧 Email inviata a ${formEmail}`);
+        } else {
+          console.warn('⚠️ Nessuna email utente disponibile per l\'invio');
         }
+
+      } catch (err) {
+        console.error('❌ Errore nell\'invio delle email:', err);
       }
     }
   });
 });
 
-// Checkout → genera link PayPal con custom
+// Genera link PayPal
 app.post('/api/checkout', (req, res) => {
   const { name, surname, email, quantity } = req.body;
 
@@ -121,7 +163,6 @@ app.post('/api/checkout', (req, res) => {
   const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${process.env.PAYPAL_EMAIL}&item_name=Prevendite+per+evento&amount=12.00&quantity=${quantity}&currency_code=EUR&notify_url=${process.env.IPN_URL}&custom=${encodedCustom}`;
 
   console.log('🔗 Link PayPal generato:', paypalLink);
-
   res.json({ paypalLink });
 });
 
