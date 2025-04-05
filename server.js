@@ -85,7 +85,8 @@ app.post('/api/ipn', (req, res) => {
             from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
             to: process.env.EMAIL_ORGANIZER,
             subject: 'Pagamento confermato da PayPal',
-            html: createOrganizerMessageHtml({ name, surname, formEmail, paypalEmail, quantity })
+            html: createOrganizerMessageHtml({ name, surname, formEmail, paypalEmail, quantity }),
+            replyTo: 'dirtyrainfest@gmail.com'
           });
 
           // Email all'utente (solo email del form, se presente)
@@ -94,7 +95,8 @@ app.post('/api/ipn', (req, res) => {
               from: `"Prevendite Evento" <${process.env.EMAIL_SENDER}>`,
               to: formEmail,
               subject: 'Conferma pagamento avvenuto',
-              html: createBuyerMessageHtml({ name, surname, email: formEmail, quantity })
+              html: createBuyerMessageHtml({ name, surname, email: formEmail, quantity }),
+              replyTo: 'dirtyrainfest@gmail.com'
             });
             console.log(`📧 Email inviata a ${formEmail}`);
           } else {
