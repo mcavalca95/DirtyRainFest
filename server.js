@@ -39,8 +39,7 @@ function createBuyerMessageHtml({ name, surname, email, quantity }) {
         <p>Ti aspettiamo all’evento! 🎶</p>
         
         <p style="margin-top: 20px;">
-          🎫 <strong>Importante:</strong> per accedere all’evento è necessario essere in possesso della <strong>tessera AICS</strong>.<br>
-          Se non l’hai ancora, potrai farla direttamente in loco la sera stessa.
+          🎫 Ingresso riservato agli associati <strong>AICS 2025-26</strong> [Tessera AICS valida anche al FreakOut Club, Locomotiv Club, Binario69, Studio54 TANK e su tutto il territorio nazionale] che abbiano perfezionato la propria affiliazione.
         </p>
         
         <p style="margin-top: 30px; font-size: 12px; color: #888;">Contattaci: rain.info@raincrew.com</p>
