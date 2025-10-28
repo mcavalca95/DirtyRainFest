@@ -26,13 +26,23 @@ function createBuyerMessageHtml({ name, surname, email, quantity }) {
       <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <h2 style="color: #111;">🎟️ Conferma acquisto biglietti - Dirty Rain Fest Atto 2 - 15/11/2025</h2>
         <p>Grazie per il tuo acquisto! Abbiamo ricevuto il pagamento per <strong>${quantity}</strong> prevendita/e. Presenta questa email direttamente in cassa.</p>
+        
         <hr style="margin: 20px 0;">
+        
         <p><strong>Nome:</strong> ${name}</p>
         <p><strong>Cognome:</strong> ${surname}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Quantità:</strong> ${quantity}</p>
+        
         <hr style="margin: 20px 0;">
+        
         <p>Ti aspettiamo all’evento! 🎶</p>
+        
+        <p style="margin-top: 20px;">
+          🎫 <strong>Importante:</strong> per accedere all’evento è necessario essere in possesso della <strong>tessera AICS</strong>.<br>
+          Se non l’hai ancora, potrai farla direttamente in loco la sera stessa.
+        </p>
+        
         <p style="margin-top: 30px; font-size: 12px; color: #888;">Contattaci: rain.info@raincrew.com</p>
       </div>
     </div>
